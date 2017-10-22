@@ -2,11 +2,9 @@
 services: docker
 
 env:
+  - test_idempotence: false
   - distro: centos7
   - distro: ubuntu1604
-  #- distro: ubuntu1404
-  #- distro: debian9
-  #- distro: debian8
 
 script:
   # Download test shim.
