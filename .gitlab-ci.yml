@@ -1,0 +1,12 @@
+---
+test:ubuntu:
+  image: geerlingguy/docker-ubuntu1604-ansible
+
+  script:
+    - ansible-playbook -i tests/inventory tests/test.yml -vvv
+
+test:centos:
+  image: geerlingguy/docker-centos7-ansible
+
+  script:
+    - ansible-playbook -i tests/inventory tests/test.yml -vvv

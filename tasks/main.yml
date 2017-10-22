@@ -1,0 +1,6 @@
+---
+- include: package.yml
+  when: crystal_install_method == "package"
+
+- include: standalone.yml
+  when: crystal_install_method == "standalone"

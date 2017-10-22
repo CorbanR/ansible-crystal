@@ -1,0 +1,12 @@
+---
+#Package install
+crystal_state: latest #change to "present" if you don't want to install the latest
+crystal_install_method: package #Valid values are package, standalone
+
+#Binary install
+crystal_version: 0.23.1
+crystal_revision: 3
+crystal_platform: linux
+crystal_arch: x86_64
+crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
+crystal_checksum: "sha256:6a84cc866838ffa5250e28c3ce1a918a93f89c06393fe8cfd4068fcbbc66f3ab"

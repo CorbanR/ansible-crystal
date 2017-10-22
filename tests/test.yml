@@ -1,0 +1,35 @@
+---
+#Test package install method
+- hosts: localhost
+  remote_user: root
+  vars:
+    crystal_install_method: package
+  roles:
+    - ../ansible-crystal
+  post_tasks:
+    - name: Get crystal version
+      shell: "crystal --version | awk '{print $2}'"
+      register: version_check
+
+    - name: Assert version > 0.23.1
+      assert:
+        that:
+          - "version_check.stdout|version_compare('0.23.1', '>=')"
+
+- hosts: localhost
+  remote_user: root
+  vars:
+    crystal_install_method: standalone
+    crystal_revision: 3
+    crystal_version: 0.23.1
+  roles:
+    - ../ansible-crystal
+  post_tasks:
+    - name: Get crystal version
+      shell: "/usr/local/bin/crystal --version | awk '{print $2}'"
+      register: version_check
+
+    - name: Assert version == {{ crystal_version }}
+      assert:
+        that:
+          - "version_check.stdout|version_compare(crystal_version, '>=')"
