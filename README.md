@@ -1,3 +1,4 @@
+![alt text](https://travis-ci.org/CorbanR/ansible-crystal.svg?branch=master)
 ansible-crystal
 =========
 

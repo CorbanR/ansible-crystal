@@ -5,7 +5,7 @@
   vars:
     crystal_install_method: package
   roles:
-    - ../ansible-crystal
+    - role_under_test
   post_tasks:
     - name: Get crystal version
       shell: "crystal --version | awk '{print $2}'"
@@ -23,7 +23,7 @@
     crystal_revision: 3
     crystal_version: 0.23.1
   roles:
-    - ../ansible-crystal
+    - role_under_test
   post_tasks:
     - name: Get crystal version
       shell: "/usr/local/bin/crystal --version | awk '{print $2}'"
