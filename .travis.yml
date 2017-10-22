@@ -2,9 +2,11 @@
 services: docker
 
 env:
-  - test_idempotence: false
-  - distro: centos7
-  - distro: ubuntu1604
+  global:
+    - test_idempotence: false
+  matrix:
+    - distro: centos7
+    - distro: ubuntu1604
 
 script:
   # Download test shim.
