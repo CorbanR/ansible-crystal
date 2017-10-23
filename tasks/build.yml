@@ -1,0 +1,14 @@
+---
+- block:
+    - name: Install crystal build dependencies
+      apt:
+        name: build-essential
+
+  when: ansible_os_family == "Debian"
+
+- block:
+    - name: Install crystal build dependencies
+      yum:
+        name: "@Development tools"
+
+  when: ansible_os_family == "RedHat"

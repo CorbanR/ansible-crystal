@@ -12,7 +12,10 @@ Ansible >= 2.3
 
 Role Variables
 --------------
-Defaults:
+Defaults:  
+Install build dependencies.  
+`crystal_build: false`
+
 Installation method. Valid values are `package` or `standalone`  
 `crystal_install_method: package ` 
 
@@ -39,7 +42,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: CorbanR.crystal, crystal_install_method: package }
+         - { role: CorbanR.crystal, crystal_install_method: package, crystal_build: true }
 
 License
 -------
