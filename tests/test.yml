@@ -4,6 +4,7 @@
   remote_user: root
   vars:
     crystal_install_method: package
+    crystal_build_deps: true
   roles:
     - role_under_test
   post_tasks:
@@ -22,6 +23,7 @@
     crystal_install_method: standalone
     crystal_revision: 3
     crystal_version: 0.23.1
+    crystal_build_deps: true
   roles:
     - role_under_test
   post_tasks:

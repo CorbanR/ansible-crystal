@@ -1,6 +1,6 @@
 ---
 #Install build dependancies
-crystal_build: false
+crystal_build_deps: false
 
 #Package install
 crystal_state: latest #change to "present" if you don't want to install the latest

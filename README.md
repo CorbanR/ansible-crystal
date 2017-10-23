@@ -42,7 +42,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: CorbanR.crystal, crystal_install_method: package, crystal_build: true }
+         - { role: CorbanR.crystal, crystal_install_method: package, crystal_build_deps: true }
 
 License
 -------
