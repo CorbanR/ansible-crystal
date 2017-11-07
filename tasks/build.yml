@@ -15,6 +15,6 @@
         name: "{{ item }}"
       with_items:
         - "@Development tools"
-        - libssl-dev
+        - openssl-devel
 
   when: ansible_os_family == "RedHat"
