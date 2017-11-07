@@ -3,10 +3,10 @@ test:ubuntu:
   image: geerlingguy/docker-ubuntu1604-ansible
 
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv
+    - ansible-playbook -i tests/inventory tests/test.yml -vvv --extra-vars "ci_role_path=../ansible-crystal"
 
 test:centos:
   image: geerlingguy/docker-centos7-ansible
 
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv
+    - ansible-playbook -i tests/inventory tests/test.yml -vvv --extra-vars "ci_role_path=../ansible-crystal"

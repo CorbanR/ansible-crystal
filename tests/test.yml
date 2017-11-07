@@ -6,7 +6,7 @@
     crystal_install_method: package
     crystal_build_deps: true
   roles:
-    - role_under_test
+    - "{{ ci_role_path | default(role_under_test) }}"
   post_tasks:
     - name: Get crystal version
       shell: "crystal --version | awk '{print $2}'"
@@ -25,7 +25,7 @@
     crystal_version: 0.23.1
     crystal_build_deps: true
   roles:
-    - role_under_test
+    - "{{ ci_role_path | default(role_under_test) }}"
   post_tasks:
     - name: Get crystal version
       shell: "/usr/local/bin/crystal --version | awk '{print $2}'"
