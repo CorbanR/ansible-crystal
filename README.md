@@ -12,26 +12,26 @@ Ansible >= 2.3
 
 Role Variables
 --------------
-Defaults:  
-Install build dependencies.  
-`crystal_build: false`
-
-Installation method. Valid values are `package` or `standalone`  
+This role supports multiple installation methods. Installation types are `package` or `standalone`  
 `crystal_install_method: package ` 
 
-If `package`, specify `latest` or `present`  
+When `package` installation type, specify `latest` or `present`  
 `crystal_state: latest`
 
-If `standalone` specify crystal version, platform, arch, release, and checksum of tar.gz.  
-Creates two symlinks `/usr/local/bin/crystal` and `/usr/local/bin/crystal-{{ crystal_version }}`  
+When `standalone` installation type, specify crystal version, platform, arch, release, and checksum of tar.gz.  
+see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
+two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.23.1
-crystal_revision: 3
+crystal_version: 0.24.1
+crystal_revision: 2
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
 crystal_checksum: "sha256:6a84cc866838ffa5250e28c3ce1a918a93f89c06393fe8cfd4068fcbbc66f3ab"
 ```
+
+Optionally install additional packages required to compile crystal code.  
+`crystal_build_deps: false`
 
 Installation
 ------------

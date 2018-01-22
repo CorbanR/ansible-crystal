@@ -12,17 +12,17 @@
       shell: "crystal --version | awk '{print $2}'"
       register: version_check
 
-    - name: Assert version > 0.23.1
+    - name: Assert version > 0.24.1
       assert:
         that:
-          - "version_check.stdout|version_compare('0.23.1', '>=')"
+          - "version_check.stdout|version_compare('0.24.1', '>=')"
 
 - hosts: localhost
   remote_user: root
   vars:
     crystal_install_method: standalone
-    crystal_revision: 3
-    crystal_version: 0.23.1
+    crystal_revision: 2
+    crystal_version: 0.24.1
     crystal_build_deps: true
   roles:
     - "{{ ci_role_path | default('role_under_test') }}"
