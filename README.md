@@ -27,7 +27,7 @@ crystal_revision: 2
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:6a84cc866838ffa5250e28c3ce1a918a93f89c06393fe8cfd4068fcbbc66f3ab"
+crystal_checksum: "sha256:0336324fadaf1ecfac08bebead4dda2546a7efd53054845249aeccd278ccc6f5"
 ```
 
 Optionally install additional packages required to compile crystal code.  
