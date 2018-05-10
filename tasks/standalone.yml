@@ -9,7 +9,7 @@
 
 - name: Download crystal binary
   get_url:
-    url: "https://github.com/crystal-lang/crystal/releases/download/v{{ crystal_version }}/{{ crystal_release }}.tar.gz"
+    url: "https://github.com/crystal-lang/crystal/releases/download/{{ crystal_version }}/{{ crystal_release }}.tar.gz"
     dest: "/usr/local/src/{{ crystal_release }}.tar.gz"
     checksum: "{{ crystal_checksum }}"
 
