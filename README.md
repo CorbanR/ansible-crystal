@@ -23,7 +23,7 @@ see the [crystal release page](https://github.com/crystal-lang/crystal/releases)
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
 crystal_version: 0.24.2
-crystal_revision: 2
+crystal_revision: 1
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
