@@ -7,7 +7,7 @@ crystal_state: latest #change to "present" if you don't want to install the late
 crystal_install_method: package #Valid values are package, standalone
 
 #Binary install
-crystal_version:  0.24.1
+crystal_version:  0.24.2
 crystal_revision: 2
 crystal_platform: linux
 crystal_arch: x86_64
