@@ -12,4 +12,4 @@ crystal_revision: 1
 crystal_platform: linux
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:0336324fadaf1ecfac08bebead4dda2546a7efd53054845249aeccd278ccc6f5"
+crystal_checksum: "sha256:610bb650d20c161ba6900f23b2044a5d12b5669d5c8e466ea419e42f1a6d13f1"
