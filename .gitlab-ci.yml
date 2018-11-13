@@ -21,8 +21,6 @@ before_script:
 
 molecule:
   stage: molecule
-  tags:
-    - docker
   script:
     - docker -v
     - python -V
