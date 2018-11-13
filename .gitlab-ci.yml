@@ -4,12 +4,11 @@ image: docker:stable
 stages:
   - molecule
 
-# Varialbes and docker:dnd only needed if running docker privileged on the host
 # See https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
 # Personal gitlab instance using socket binding
-# variables:
-#  DOCKER_HOST: tcp://docker:2375/
-#  DOCKER_DRIVER: overlay2
+variables:
+# DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
 
 # services:
 #  - docker:dind
@@ -18,16 +17,14 @@ before_script:
   - apk add --no-cache python python-dev py-pip build-base
     libffi libffi-dev openssl openssl-dev linux-headers
   - pip install pip setuptools --upgrade
-  - pip install ansible molecule docker
   - docker info
-  - source /virtenv/bin/activate
 
 molecule:
   stage: molecule
   script:
     - docker -v
     - python -V
-    - pip install -r requirements.txt
+    - pip install ansible molecule docker
     - ansible --version
     - molecule --version
     - molecule test
