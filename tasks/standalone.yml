@@ -23,14 +23,14 @@
     src: "/usr/local/src/{{ crystal_release }}.tar.gz"
     dest: "/usr/local/src/{{ crystal_release }}"
     extra_opts: "--strip-components=1"
-    remote_src: no
+    remote_src: true
 
 - name: Symlink crystal binary with version
   file:
     src: "/usr/local/src/{{ crystal_release }}/bin/crystal"
     dest: "/usr/local/bin/crystal-{{ crystal_version }}"
     mode: "0755"
-    force: yes
+    force: true
     state: link
 
 - name: Symlink crystal standalone bin without version
@@ -39,4 +39,4 @@
     dest: "/usr/local/bin/crystal"
     mode: "0755"
     state: link
-    force: yes
+    force: true

@@ -2,21 +2,20 @@
 - block:
     - name: Ensure cache is updated for testing
       apt:
-        update_cache: yes
+        update_cache: true
         cache_valid_time: 0
       when: ansible_virtualization_type == "docker"
 
     - name: Install additional dependancies
       apt:
-        name: "{{ item }}"
-      with_items:
-        - apt-transport-https
+        name: apt-transport-https
 
     - name: Add the crystal apt signing key
       apt_key:
         id: 09617FD37CC06B54
         data: "{{ item }}"
-      with_file: crystal-apt.gpg.pub
+      with_file:
+        - crystal-apt.gpg.pub
 
     - name: Add crystal apt repository
       apt_repository:
@@ -26,7 +25,7 @@
     - name: Install crystal
       apt:
         name: crystal
-        update_cache: yes
+        update_cache: true
         state: "{{ crystal_state }}"
 
   when: ansible_os_family == "Debian"
@@ -53,6 +52,6 @@
     - name: Install crystal
       yum:
         name: crystal
-        update_cache: yes
+        update_cache: true
         state: "{{ crystal_state }}"
   when: ansible_os_family == "RedHat"

@@ -2,19 +2,17 @@
 - block:
     - name: Install commom crystal build dependencies
       apt:
-        name: "{{ item }}"
-      with_items:
-        - build-essential
-        - libssl-dev
+        name:
+          - build-essential
+          - libssl-dev
 
   when: ansible_os_family == "Debian"
 
 - block:
     - name: Install common crystal build dependencies
       yum:
-        name: "{{ item }}"
-      with_items:
-        - "@Development tools"
-        - openssl-devel
+        name:
+          - "@Development tools"
+          - openssl-devel
 
   when: ansible_os_family == "RedHat"

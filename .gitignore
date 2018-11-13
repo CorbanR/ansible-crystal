@@ -1,1 +1,9 @@
+*.pyc
 *.retry
+*.swp
+.DS_Store
+.bundle
+.overcommit.yml
+.vagrant
+__pycache__/
+venv/

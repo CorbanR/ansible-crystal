@@ -1,21 +1,20 @@
 ---
-services: docker
-
-env:
-  global:
-    - test_idempotence: false
-  matrix:
-    - distro: centos7
-    - distro: ubuntu1604
-    - distro: ubuntu1804
-
+sudo: required
+language: python
+cache: pip
+services:
+  - docker
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce openssl-dev build-essential python-dev
+install:
+  - pip install pip setuptools --upgrade
+  - pip install ansible
+  - pip install molecule docker
 script:
-  # Download test shim.
-  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
-  - chmod +x ${PWD}/tests/test.sh
-
-  # Run tests.
-  - ${PWD}/tests/test.sh
+- molecule test
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

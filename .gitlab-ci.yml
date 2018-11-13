@@ -1,18 +1,32 @@
 ---
-test:ubuntu1606:
-  image: geerlingguy/docker-ubuntu1604-ansible
+image: docker:stable
 
+stages:
+  - molecule
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:dind
+
+before_script:
+  - apk add --no-cache python python-dev py-pip build-base
+    libffi libffi-dev openssl openssl-dev linux-headers
+  - pip install pip setuptools --upgrade
+  - pip install ansible molecule docker
+  - docker info
+  - source /virtenv/bin/activate
+
+molecule:
+  stage: molecule
+  tags:
+    - docker
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv --extra-vars "ci_role_path=../ansible-crystal"
-
-test:ubuntu1804:
-  image: geerlingguy/docker-ubuntu1804-ansible
-
-  script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv --extra-vars "ci_role_path=../ansible-crystal"
-
-test:centos:
-  image: geerlingguy/docker-centos7-ansible
-
-  script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv --extra-vars "ci_role_path=../ansible-crystal"
+    - docker -v
+    - python -V
+    - pip install -r requirements.txt
+    - ansible --version
+    - molecule --version
+    - molecule test

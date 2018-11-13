@@ -1,15 +1,16 @@
 ---
-#Install build dependancies
+# Install build dependancies
 crystal_build_deps: false
 
-#Package install
-crystal_state: latest #change to "present" if you don't want to install the latest
-crystal_install_method: package #Valid values are package, standalone
+# Package install
+crystal_state: latest
+# Valid values are package, standalone
+crystal_install_method: package
 
-#Binary install
-crystal_version:  0.26.1
+# Binary install
+crystal_version: 0.27.0
 crystal_revision: 1
 crystal_platform: linux
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:610bb650d20c161ba6900f23b2044a5d12b5669d5c8e466ea419e42f1a6d13f1"
+crystal_checksum: "sha256:a6a6966e1089df2c3467ceb200db9a282dcbfef54418865638bf152f3cd36642"
