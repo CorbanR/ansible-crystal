@@ -8,13 +8,13 @@ before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
-  - sudo apt-get -y install docker-ce openssl-dev build-essential python-dev
+  - sudo apt-get -y install docker-ce libssl-dev build-essential python-dev
 install:
   - pip install pip setuptools --upgrade
   - pip install ansible
   - pip install molecule docker
 script:
-- molecule test
+- travis_wait 30 molecule test -s travis
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
