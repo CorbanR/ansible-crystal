@@ -9,5 +9,5 @@
     - role: ansible-crystal
       crystal_install_method: standalone
       crystal_revision: 1
-      crystal_version: 0.27.0
+      crystal_version: 0.27.2
       crystal_build_deps: true

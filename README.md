@@ -22,12 +22,12 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.27.0
+crystal_version: 0.27.2
 crystal_revision: 1
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:0336324fadaf1ecfac08bebead4dda2546a7efd53054845249aeccd278ccc6f5"
+crystal_checksum: "sha256:55abdc7f047c0eb74f3bb080b8bf013d8ef34fc8794827c8b68f29d1e7e98516"
 ```
 
 Optionally install additional packages required to compile crystal code.  
