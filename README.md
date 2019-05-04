@@ -1,6 +1,8 @@
-![alt text](https://travis-ci.org/CorbanR/ansible-crystal.svg?branch=master)  
+![pipeline](https://gitlab.com/CorbanR/ansible-crystal/badges/master/pipeline.svg)
+
 ansible-crystal
 =========
+The github repository is just a mirror of [ https://gitlab.com/CorbanR/ansible-crystal ](https://gitlab.com/CorbanR/ansible-crystal) please submit all issues and merge requests to gitlab.
 
 Role to install [crystal-lang](https://crystal-lang.org/). This role offers two installation methods.
 1. Via apt or yum repositories
@@ -22,12 +24,12 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.27.2
+crystal_version: 0.28.0
 crystal_revision: 1
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:55abdc7f047c0eb74f3bb080b8bf013d8ef34fc8794827c8b68f29d1e7e98516"
+crystal_checksum: "sha256:0ae13581b0d30740f232c9a29e444184121fc263b22c01d2c94290660860982e"
 ```
 
 Optionally install additional packages required to compile crystal code.  
