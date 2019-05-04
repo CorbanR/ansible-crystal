@@ -5,26 +5,28 @@ stages:
   - molecule
 
 # See https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
-# Personal gitlab instance using socket binding
 variables:
-# DOCKER_HOST: tcp://docker:2375/
+  DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
 
-# services:
-#  - docker:dind
+services:
+  - docker:dind
 
 before_script:
-  - apk add --no-cache python python-dev py-pip build-base
-    libffi libffi-dev openssl openssl-dev linux-headers
-  - pip install pip setuptools --upgrade
+  - apk add --no-cache python3 python3-dev py3-pip py3-lxml
+    build-base libffi libffi-dev openssl openssl-dev libxml2
+    libxml2-dev linux-headers libxslt libxslt-dev
+  - pip3 install pip setuptools --upgrade
   - docker info
 
 molecule:
   stage: molecule
   script:
     - docker -v
-    - python -V
-    - pip install ansible molecule docker pygments PyYAML Sphinx mock mocker ncclient
+    - python3 -V
+    - pip3 install ansible molecule docker pygments PyYAML Sphinx mock mocker ncclient
     - ansible --version
     - molecule --version
     - molecule test
+  tags:
+    - docker
