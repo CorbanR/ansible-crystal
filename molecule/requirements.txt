@@ -1,0 +1,10 @@
+ansible~=2.8.2
+molecule~=2.20
+testinfra~=3.0.5
+docker~=4.0
+Pygments
+PyYAML
+Sphinx
+mock
+mocker
+ncclient

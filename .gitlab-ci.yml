@@ -24,7 +24,7 @@ molecule:
   script:
     - docker -v
     - python3 -V
-    - pip3 install ansible molecule docker pygments PyYAML Sphinx mock mocker ncclient
+    - pip3 install -r molecule/requirements.txt
     - ansible --version
     - molecule --version
     - molecule test
