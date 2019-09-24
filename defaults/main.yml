@@ -8,9 +8,9 @@ crystal_state: latest
 crystal_install_method: package
 
 # Binary install
-crystal_version: 0.29.0
+crystal_version: 0.31.0
 crystal_revision: 1
 crystal_platform: linux
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:cad27db08542947e788e7c06fc00691c05ba678cedf20ecf9baa8cee741233f3"
+crystal_checksum: "sha256:e0edff85da9375178f2e5c72845b6d3eb6abc1d9e32c9033451ae4c1fc0bf09a"
