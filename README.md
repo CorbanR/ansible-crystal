@@ -10,7 +10,7 @@ Role to install [crystal-lang](https://crystal-lang.org/). This role offers two 
 
 Requirements
 ------------
-Ansible >= 2.5
+Ansible >= 2.7
 
 Role Variables
 --------------
