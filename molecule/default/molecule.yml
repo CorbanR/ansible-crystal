@@ -3,9 +3,6 @@ dependency:
   name: galaxy
 driver:
   name: docker
-lint:
-  name: yamllint
-  enabled: true
 platforms:
   - name: centos7
     image: centos:7
@@ -15,13 +12,9 @@ platforms:
     image: ubuntu:18.04
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
-    enabled: true
 scenario:
   name: default
   test_sequence:
-    #- lint
     - destroy
     - dependency
     - syntax
@@ -34,5 +27,3 @@ scenario:
     - destroy
 verifier:
   name: testinfra
-  lint:
-    name: flake8
