@@ -24,12 +24,12 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.33.0
+crystal_version: 0.34.0
 crystal_revision: 1
 crystal_platform: linux 
 crystal_arch: x86_64
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:9b9e078e9ba24fb97ee591d5f0a57c88cd018bd85ed6bdde9a30e5834b158128"
+crystal_checksum: "sha256:268ace9073ad073b56c07ac10e3f29927423a8b170d91420b0ca393fb02acfb1"
 ```
 
 Optionally install additional packages required to compile crystal code.  
@@ -46,6 +46,18 @@ Example Playbook
       roles:
          - { role: CorbanR.crystal, crystal_install_method: package, crystal_build_deps: true }
 
+Running Tests
+------------
+
+The easiest way to get an environment that can run tests is to
+1. Have docker installed
+2. Create a python virtualenv
+3. Install dependencies via `pip install -r molecule/requirements.txt`
+4. Run `molecule test`
+
+If you have [nix](https://nixos.org/download.html) installed you can run `nix-shell` followed by a `pip install -r molecule/requirements.txt`
+
+
 License
 -------
 
@@ -54,4 +66,4 @@ MIT / BSD
 Author Information
 ------------------
 Corban Raun  
-[https://www.raunco.co](https://www.raunco.co)
+[https://raunco.co](https://raunco.co)

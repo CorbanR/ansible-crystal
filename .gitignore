@@ -3,7 +3,9 @@
 *.swp
 .DS_Store
 .bundle
+.envrc
 .overcommit.yml
 .vagrant
+.venv
 __pycache__/
 venv/
