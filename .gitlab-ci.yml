@@ -14,7 +14,7 @@ services:
 
 before_script:
   - apk add --no-cache python3 python3-dev py3-pip py3-lxml
-    build-base libffi libffi-dev openssl openssl-dev libxml2
+    build-base rust cargo libffi libffi-dev openssl openssl-dev libxml2
     libxml2-dev linux-headers libxslt libxslt-dev
   - pip3 install pip setuptools --upgrade
   - docker info
@@ -27,6 +27,6 @@ molecule:
     - pip3 install -r molecule/requirements.txt
     - ansible --version
     - molecule --version
-    - molecule test
+    - molecule test --all
   tags:
     - docker

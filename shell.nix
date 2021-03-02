@@ -4,7 +4,7 @@ with pkgs;
 
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Security;
-  darwin_packages = [ CoreServices ApplicationServices Security];
+  darwin_packages = [CoreServices ApplicationServices Security];
 
   # Python virtualenv
   pythonPackages = python3Packages;
