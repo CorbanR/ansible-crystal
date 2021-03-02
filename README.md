@@ -53,7 +53,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: CorbanR.crystal, crystal_install_method: package, crystal_build_deps: true }
+         - { role: CorbanR.crystal, crystal_install_method: repository, crystal_build_deps: true }
 
 Running Tests
 ------------
