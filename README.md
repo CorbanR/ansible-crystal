@@ -14,22 +14,31 @@ Ansible >= 2.7
 
 Role Variables
 --------------
-This role supports multiple installation methods. Installation types are `package` or `standalone`  
-`crystal_install_method: package ` 
+This role supports multiple installation methods. Installation types are `repository` or `standalone`  
+`crystal_install_method: repository ` 
 
-When `package` installation type, specify `latest` or `present`  
-`crystal_state: latest`
+```
+# Latest or present
+crystal_state: present
+# Only applies to (Debian/Ubuntu)
+crystal_install_recommends: true
+# Options are stable, unstable, nightly 
+crystal_channel: stable
+```
+
+You can specify the `apt/deb`, or `yum/rpm` package version by setting `crystal_version_repository_override`  
+Example: `crystal_version_repository_override: crystal={{crystal_version}}-{{crystal_revision}}` to specify the `apt/deb` package version.
 
 When `standalone` installation type, specify crystal version, platform, arch, release, and checksum of tar.gz.  
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.34.0
+crystal_version: 0.36.1
 crystal_revision: 1
-crystal_platform: linux 
-crystal_arch: x86_64
+crystal_platform: "{{ ansible_system | lower | default('linux') }}"
+crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:268ace9073ad073b56c07ac10e3f29927423a8b170d91420b0ca393fb02acfb1"
+crystal_checksum: "sha256:38cc7514f8d9e463665ebaf7232d3a6c46a7397fc9ff5c05fd0f9e4706febb18"
 ```
 
 Optionally install additional packages required to compile crystal code.  

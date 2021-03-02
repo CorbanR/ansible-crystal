@@ -2,15 +2,17 @@
 # Install build dependancies
 crystal_build_deps: false
 
-# Package install
-crystal_state: latest
-# Valid values are package, standalone
-crystal_install_method: package
+# Repository install
+crystal_install_recommends: true
+crystal_state: present
+crystal_channel: stable
+# Valid values are repository, standalone
+crystal_install_method: repository
 
 # Binary install
-crystal_version: 0.34.0
+crystal_version: 0.36.1
 crystal_revision: 1
-crystal_platform: linux
-crystal_arch: x86_64
+crystal_platform: "{{ ansible_system | lower | default('linux') }}"
+crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:268ace9073ad073b56c07ac10e3f29927423a8b170d91420b0ca393fb02acfb1"
+crystal_checksum: "sha256:38cc7514f8d9e463665ebaf7232d3a6c46a7397fc9ff5c05fd0f9e4706febb18"

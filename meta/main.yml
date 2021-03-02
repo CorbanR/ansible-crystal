@@ -3,7 +3,7 @@ galaxy_info:
   author: "Corban Raun"
   description: |
     Ansible role that installs Crystal (https://crystal-lang.org/).
-    The latest stable release that has been compiled for x86 64-bit Linux systems is installed by default.
+    Installs the latest stable release from official Bintray repositories by default(x86_64 Linux).
     Different platforms and versions are supported by modifying the role variables.
   license: MIT
   min_ansible_version: 2.7

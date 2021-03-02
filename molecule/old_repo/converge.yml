@@ -1,0 +1,66 @@
+---
+- name: Converge
+  hosts: all
+  pre_tasks:
+    - block:
+        - name: Install additional dependancies
+          apt:
+            update_cache: true
+            pkg:
+              - apt-transport-https
+              - gnupg
+
+        - name: Add old apt key
+          apt_key:
+            id: 09617FD37CC06B54
+            state: present
+            data: "{{ item }}"
+          with_file:
+            - ../../files/crystal-apt.gpg.pub
+
+        - name: Add old crystal apt repository
+          apt_repository:
+            repo: "deb https://dist.crystal-lang.org/apt crystal main"
+            state: present
+          register: apt_repo_removed
+
+        - name: Install crystal from old repo
+          apt:
+            name: crystal
+            update_cache: true
+            state: latest
+          ignore_errors: true
+      when: ansible_os_family == "Debian"
+
+    - block:
+        - name: Copy old yum key to remote host
+          copy:
+            src: ../../files/crystal-rpm.gpg.pub
+            dest: /usr/local/src/crystal-rpm.gpg.pub
+
+        - name: Add old rpm_key
+          rpm_key:
+            state: present
+            key: /usr/local/src/crystal-rpm.gpg.pub
+
+        - name: Add old crystal rpm repository
+          yum_repository:
+            name: Crystal
+            description: Crystal rpm repository
+            file: crystal.repo
+            gpgcheck: true
+            state: present
+            baseurl: http://dist.crystal-lang.org/rpm/
+
+        - name: Install crystal from old rpm repository
+          yum:
+            name: crystal
+            update_cache: true
+            state: latest
+          ignore_errors: true
+      when: ansible_os_family == "RedHat"
+
+  roles:
+    - role: ansible-crystal
+      crystal_install_method: repository
+      crystal_build_deps: true

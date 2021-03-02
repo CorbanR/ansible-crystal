@@ -1,7 +1,9 @@
 ansible~=2.9.5
 molecule~=3.0.2
+molecule[docker]
 testinfra~=5.1.0
 docker~=4.2.0
+wheel
 Pygments
 PyYAML
 Sphinx

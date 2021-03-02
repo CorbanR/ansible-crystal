@@ -13,7 +13,7 @@ platforms:
 provisioner:
   name: ansible
 scenario:
-  name: default
+  name: old_repo
   test_sequence:
     - destroy
     - dependency
@@ -21,7 +21,7 @@ scenario:
     - create
     - prepare
     - converge
-    - idempotence
+    #- idempotence
     - side_effect
     - verify
     - destroy

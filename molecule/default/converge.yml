@@ -3,11 +3,11 @@
   hosts: all
   roles:
     - role: ansible-crystal
-      crystal_install_method: package
+      crystal_install_method: repository
       crystal_build_deps: true
 
     - role: ansible-crystal
       crystal_install_method: standalone
       crystal_revision: 1
-      crystal_version: 0.34.0
+      crystal_version: 0.36.1
       crystal_build_deps: true

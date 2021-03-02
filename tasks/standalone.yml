@@ -4,8 +4,8 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - unzip
     - tar
+    - unzip
 
 - name: Download crystal binary
   get_url:
