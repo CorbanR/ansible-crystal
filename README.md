@@ -33,12 +33,12 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 0.36.1
+crystal_version: 1.0.0
 crystal_revision: 1
 crystal_platform: "{{ ansible_system | lower | default('linux') }}"
 crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:38cc7514f8d9e463665ebaf7232d3a6c46a7397fc9ff5c05fd0f9e4706febb18"
+crystal_checksum: "sha256:00211ca77758e99210ec40b8c5517b086d2ff9909e089400f6d847a95e5689a4"
 ```
 
 Optionally install additional packages required to compile crystal code.  
@@ -53,7 +53,7 @@ Example Playbook
 
     - hosts: all
       roles:
-         - { role: CorbanR.crystal, crystal_install_method: package, crystal_build_deps: true }
+         - { role: CorbanR.crystal, crystal_install_method: repository, crystal_build_deps: true }
 
 Running Tests
 ------------
