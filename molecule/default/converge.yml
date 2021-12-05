@@ -1,6 +1,23 @@
 ---
+- name: Pre
+  hosts: all
+  gather_facts: false
+  pre_tasks:
+    - name: Install python for Ansible
+      ansible.builtin.raw: test -e /usr/bin/python ||
+        (test -e $(which apt) && (test -e $(apt -y update && apt install -y python python-apt))) ||
+        (test -e $(which apt) && (test -e $(apt -y update && apt install -y python3 python3-apt))) ||
+        (test -e $(which apt) && (apt -y update && apt install -y python3 python3-apt)) ||
+        (test -e $(which yum) && (yum update -y && yum install -y python3))
+      changed_when: false
+
 - name: Converge
   hosts: all
+  pre_tasks:
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          {{ ansible_distribution }}-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}
   roles:
     - role: ansible-crystal
       crystal_install_method: repository
@@ -9,5 +26,5 @@
     - role: ansible-crystal
       crystal_install_method: standalone
       crystal_revision: 1
-      crystal_version: 1.0.0
+      crystal_version: 1.5.1
       crystal_build_deps: true

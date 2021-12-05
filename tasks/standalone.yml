@@ -1,6 +1,6 @@
 ---
 - name: Ensure ansible module dependancies are installed
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: present
   with_items:
@@ -8,25 +8,27 @@
     - unzip
 
 - name: Download crystal binary
-  get_url:
+  ansible.builtin.get_url:
     url: "https://github.com/crystal-lang/crystal/releases/download/{{ crystal_version }}/{{ crystal_release }}.tar.gz"
     dest: "/usr/local/src/{{ crystal_release }}.tar.gz"
+    mode: "0755"
     checksum: "{{ crystal_checksum }}"
 
 - name: Ensure destination folder exists
-  file:
+  ansible.builtin.file:
     path: "/usr/local/src/{{ crystal_release }}"
     state: directory
+    mode: "0755"
 
 - name: Unarchive crystal binary
-  unarchive:
+  ansible.builtin.unarchive:
     src: "/usr/local/src/{{ crystal_release }}.tar.gz"
     dest: "/usr/local/src/{{ crystal_release }}"
     extra_opts: "--strip-components=1"
     remote_src: true
 
 - name: Symlink crystal binary with version
-  file:
+  ansible.builtin.file:
     src: "/usr/local/src/{{ crystal_release }}/bin/crystal"
     dest: "/usr/local/bin/crystal-{{ crystal_version }}"
     mode: "0755"
@@ -34,7 +36,7 @@
     state: link
 
 - name: Symlink crystal standalone bin without version
-  file:
+  ansible.builtin.file:
     src: "/usr/local/src/{{ crystal_release }}/bin/crystal"
     dest: "/usr/local/bin/crystal"
     mode: "0755"

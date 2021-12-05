@@ -10,7 +10,7 @@ Role to install [crystal-lang](https://crystal-lang.org/). This role offers two 
 
 Requirements
 ------------
-Ansible >= 2.7
+Ansible >= 2.12
 
 Role Variables
 --------------
@@ -18,12 +18,15 @@ This role supports multiple installation methods. Installation types are `reposi
 `crystal_install_method: repository ` 
 
 ```
+# See defaults/main.yml for additional calculated variables that may be overriden
 # Latest or present
 crystal_state: present
 # Only applies to (Debian/Ubuntu)
 crystal_install_recommends: true
 # Options are stable, unstable, nightly 
 crystal_channel: stable
+# Options are true, false
+crystal_remove_old_repositories: true
 ```
 
 You can specify the `apt/deb`, or `yum/rpm` package version by setting `crystal_version_repository_override`  
@@ -33,7 +36,7 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 1.0.0
+crystal_version: 1.5.1
 crystal_revision: 1
 crystal_platform: "{{ ansible_system | lower | default('linux') }}"
 crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
@@ -64,7 +67,7 @@ The easiest way to get an environment that can run tests is to
 3. Install dependencies via `pip install -r molecule/requirements.txt`
 4. Run `molecule test`
 
-If you have [nix](https://nixos.org/download.html) installed you can run `nix-shell` followed by a `pip install -r molecule/requirements.txt`
+If you have [nix](https://nixos.org/download.html) installed you can run `nix-shell`, or `nix develop`(if using flakes). Once you are in a nix shell run `pip install -r molecule/requirements.txt`
 
 
 License

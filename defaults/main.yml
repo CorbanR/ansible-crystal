@@ -3,16 +3,29 @@
 crystal_build_deps: false
 
 # Repository install
+crystal_channel_map:
+  stable: ""
+  unstable: ":/unstable"
+  nightly: ":/nightly"
 crystal_install_recommends: true
 crystal_state: present
 crystal_channel: stable
+# Calculated values, may be overriden
+crystal_obs_project: "devel:/languages:/crystal{{ crystal_channel_map[crystal_channel] | trim }}"  # stable has no mapping
+crystal_distribution: "{% if ansible_distribution == 'Ubuntu' %}xUbuntu{% else %}{{ ansible_distribution }}{% endif %}"
+crystal_distribution_version: "{% if ansible_os_family == 'Debian' %}{{ ansible_distribution_version }}{% else %}{{ ansible_distribution_major_version }}{% endif %}"
+crystal_distribution_base_repo_url: "https://download.opensuse.org/repositories/{{ crystal_obs_project }}/{{ crystal_distribution }}_{{ crystal_distribution_version }}"
+crystal_distribution_deb_repo: "deb {{ crystal_distribution_base_repo_url }}/ /"
+crystal_distribution_yum_repo: "{{ crystal_distribution_base_repo_url }}/"
+# Remove old crystal and bintray repositories
+crystal_remove_old_repositories: true
 # Valid values are repository, standalone
 crystal_install_method: repository
 
 # Binary install
-crystal_version: 1.0.0
+crystal_version: 1.5.1
 crystal_revision: 1
 crystal_platform: "{{ ansible_system | lower | default('linux') }}"
 crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:00211ca77758e99210ec40b8c5517b086d2ff9909e089400f6d847a95e5689a4"
+crystal_checksum: "sha256:a475c3d99dbe0f2d5a72d471fa25e03c124b599e47336eed746973b4b4d787bc"

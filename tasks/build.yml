@@ -1,18 +1,18 @@
 ---
-- block:
+- name: Debian common block
+  when: ansible_os_family == "Debian"
+  block:
     - name: Install commom crystal build dependencies
-      apt:
+      ansible.builtin.apt:
         name:
           - build-essential
           - libssl-dev
 
-  when: ansible_os_family == "Debian"
-
-- block:
+- name: RedHat common block
+  when: ansible_os_family == "RedHat"
+  block:
     - name: Install common crystal build dependencies
-      yum:
+      ansible.builtin.yum:
         name:
           - "@Development tools"
           - openssl-devel
-
-  when: ansible_os_family == "RedHat"

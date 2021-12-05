@@ -1,131 +1,214 @@
 ---
 - name: Fail unless ARCH is x86_64
-  fail:
+  ansible.builtin.fail:
     msg: x86_64 is the only supported architecture
   when: crystal_arch != "x86_64"
 
-- block:
+- name: Debian block
+  when: ansible_os_family == "Debian"
+  block:
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "Installing repository {{ crystal_distribution_deb_repo }}"
+
     - name: Ensure cache is updated for testing
-      apt:
+      ansible.builtin.apt:
         update_cache: true
         cache_valid_time: 0
       when: ansible_virtualization_type == "docker"
 
     - name: Install additional dependancies
-      apt:
+      ansible.builtin.apt:
         update_cache: true
         pkg:
           - apt-transport-https
           - gnupg
+          - ca-certificates
 
-    - name: Remove old apt key
-      apt_key:
-        id: 09617FD37CC06B54
-        state: absent
+    - name: Remove old dependencies block
+      when: crystal_remove_old_repositories
+      block:
+        - name: Remove old crystal apt key
+          ansible.builtin.apt_key:
+            id: 09617FD37CC06B54
+            state: absent
+            data: "{{ item }}"
+          with_file:
+            - crystal-apt.gpg.pub
+
+        - name: Remove old bintray apt key
+          ansible.builtin.apt_key:
+            id: 379CE192D401AB61
+            state: absent
+            data: "{{ item }}"
+          with_file:
+            - bintray-public.key.asc
+
+        - name: Remove old crystal apt repositories
+          ansible.builtin.apt_repository:
+            repo: "{{ item }}"
+            state: absent
+          loop:
+            - "deb https://dist.crystal-lang.org/apt crystal main"
+            - "deb https://dl.bintray.com/crystal/deb all {{ crystal_channel }}"
+
+    - name: Add the opensuse crystal apt signing key
+      ansible.builtin.apt_key:
+        id: E456AE72856D1476
         data: "{{ item }}"
       with_file:
-        - crystal-apt.gpg.pub
+        - opensuse-public.key.asc
 
-    - name: Remove old crystal apt repository
-      apt_repository:
-        repo: "deb https://dist.crystal-lang.org/apt crystal main"
-        state: absent
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "Installing repository {{ crystal_distribution_deb_repo }}"
 
-    - name: Add the crystal bintray apt signing key
-      apt_key:
-        id: 379CE192D401AB61
-        data: "{{ item }}"
-      with_file:
-        - bintray-public.key.asc
-
-    - name: Add crystal apt repository
-      apt_repository:
-        repo: "deb https://dl.bintray.com/crystal/deb all {{ crystal_channel }}"
+    - name: Add crystal opensuse apt repository
+      ansible.builtin.apt_repository:
+        repo: "{{ crystal_distribution_deb_repo }}"
+        update_cache: true
         state: present
+      register: opensuse_repository_result
+      until: "opensuse_repository_result is not failed"
+      retries: 5
+      delay: 3
+
 
     - name: Install crystal
-      apt:
-        name: "{{ crystal_version_repository_override | default('crystal')}}"
+      ansible.builtin.apt:
+        name: "{{ crystal_version_repository_override | default('crystal') }}"
         update_cache: true
         install_recommends: "{{ crystal_install_recommends }}"
         state: "{{ crystal_state }}"
-  when: ansible_os_family == "Debian"
 
-- block:
-    - name: Install additional Yum dependancies
-      yum:
+- name: RedHat block
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "Installing repository {{ crystal_distribution_yum_repo }}"
+
+    - name: Install additional dependancies
+      ansible.builtin.yum:
         name:
           - deltarpm
         update_cache: true
-    # Notice this is checking for the crystal-apt and not crystal-rpm.. previously the task was using the wrong key.
-    # So we check for both
-    - name: Check for old apt repository gpg key
-      stat:
-        path: /usr/local/src/crystal-apt.gpg.pub
-      register: old_apt_gpg_key
+        install_repoquery: true
+      when: ansible_distribution_major_version <= "7"
 
-    - name: Check for old rpm repository gpg key
-      stat:
-        path: /usr/local/src/crystal-rpm.gpg.pub
-      register: old_rpm_gpg_key
+    - name: Install additional dependancies
+      ansible.builtin.yum:
+        name:
+          - drpm
+        update_cache: true
+        install_repoquery: true
+      when: ansible_distribution_major_version >= "8"
 
-    - name: Remove old apt key
-      rpm_key:
-        state: absent
-        key: /usr/local/src/crystal-apt.gpg.pub
-      when: old_apt_gpg_key.stat.exists
+    - name: Remove old dependencies block
+      when: crystal_remove_old_repositories
+      block:
+        # Notice this is checking for the crystal-apt and not crystal-rpm.. previously the task was using the wrong key.
+        # So we check for both
+        - name: Check for old apt repository gpg key
+          ansible.builtin.stat:
+            path: /usr/local/src/crystal-apt.gpg.pub
+          register: old_apt_gpg_key
 
-    - name: Remove old rpm key
-      rpm_key:
-        state: absent
-        key: /usr/local/src/crystal-rpm.gpg.pub
-      when: old_rpm_gpg_key.stat.exists
+        - name: Check for old rpm repository gpg key
+          ansible.builtin.stat:
+            path: /usr/local/src/crystal-rpm.gpg.pub
+          register: old_rpm_gpg_key
 
-    - name: Remove old apt gpg key file
-      file:
-        state: absent
-        path: /usr/local/src/crystal-apt.gpg.pub
-      when: old_apt_gpg_key.stat.exists
+        - name: Check for old bintray repository gpg key
+          ansible.builtin.stat:
+            path: /usr/local/src/bintray-public.key.asc
+          register: old_bintray_gpg_key
 
-    - name: Remove old rpm gpg key file
-      file:
-        state: absent
-        path: /usr/local/src/crystal-rpm.gpg.pub
-      when: old_rpm_gpg_key.stat.exists
+        - name: Remove old apt key
+          ansible.builtin.rpm_key:
+            state: absent
+            key: /usr/local/src/crystal-apt.gpg.pub
+          when: old_apt_gpg_key.stat.exists
 
-    - name: Remove old crystal rpm repository
-      yum_repository:
-        name: Crystal
-        description: Crystal rpm repository
-        file: crystal.repo
-        state: absent
-        baseurl: http://dist.crystal-lang.org/rpm/
+        - name: Remove old rpm key
+          ansible.builtin.rpm_key:
+            state: absent
+            key: /usr/local/src/crystal-rpm.gpg.pub
+          when: old_rpm_gpg_key.stat.exists
 
-    - name: Copy bintray key to remote host
-      copy:
-        src: bintray-public.key.asc
-        dest: /usr/local/src/bintray-public.key.asc
+        - name: Remove old bintray key
+          ansible.builtin.rpm_key:
+            state: absent
+            key: /usr/local/src/bintray-public.key.asc
+          when: old_bintray_gpg_key.stat.exists
 
-    - name: Add the bintray crystal rpm signing key
-      rpm_key:
+        - name: Remove old apt gpg key file
+          ansible.builtin.file:
+            state: absent
+            path: /usr/local/src/crystal-apt.gpg.pub
+          when: old_apt_gpg_key.stat.exists
+
+        - name: Remove old rpm gpg key file
+          ansible.builtin.file:
+            state: absent
+            path: /usr/local/src/crystal-rpm.gpg.pub
+          when: old_rpm_gpg_key.stat.exists
+
+        - name: Remove old bintray gpg key file
+          ansible.builtin.file:
+            state: absent
+            path: /usr/local/src/bintray-public.key.asc
+          when: old_bintray_gpg_key.stat.exists
+
+        - name: Remove old crystal rpm repository
+          ansible.builtin.yum_repository:
+            name: Crystal
+            description: Crystal rpm repository
+            file: crystal.repo
+            state: absent
+            baseurl: http://dist.crystal-lang.org/rpm/
+
+        - name: Remove old crystal bintray repository
+          ansible.builtin.yum_repository:
+            name: Crystal
+            description: Crystal rpm repository
+            file: crystal.rpm.repo
+            state: absent
+            baseurl: "https://dl.bintray.com/crystal/rpm/all/{{ crystal_arch }}/{{ crystal_channel }}"
+
+    - name: Copy opensuse key to remote host
+      ansible.builtin.copy:
+        src: opensuse-public.key.asc
+        dest: /usr/local/src/opensuse-public.key.asc
+        mode: '0644'
+
+    - name: Add the opensuse crystal rpm signing key
+      ansible.builtin.rpm_key:
         state: present
-        key: /usr/local/src/bintray-public.key.asc
+        key: /usr/local/src/opensuse-public.key.asc
+
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "crystal_distribution_base_repo_url: {{ crystal_distribution_base_repo_url }} crystal_distribution_yum_repo: {{ crystal_distribution_yum_repo }}"
 
     # See https://crystal-lang.org/install/on_centos/
-    - name: Add crystal rpm repository
-      yum_repository:
+    - name: Add opensuse(hosted) crystal rpm repository
+      ansible.builtin.yum_repository:
         name: Crystal
         description: Crystal rpm repository
-        file: crystal.rpm.repo
+        file: crystal-opensuse.rpm.repo
         state: present
         repo_gpgcheck: true
-        gpgkey: https://bintray.com/user/downloadSubjectPublicKey?username=bintray
-        gpgcheck: false   # Packages are not signed for whatever reason...
-        baseurl: "https://dl.bintray.com/crystal/rpm/all/{{ crystal_arch }}/{{ crystal_channel }}"
+        gpgkey: "{{ crystal_distribution_base_repo_url }}/repodata/repomd.xml.key"
+        gpgcheck: true   # Packages are not signed for whatever reason...
+        baseurl: "{{ crystal_distribution_yum_repo }}"
 
     - name: Install crystal
-      yum:
-        name: "{{ crystal_version_repository_override | default('crystal')}}"
+      ansible.builtin.yum:
+        name: "{{ crystal_version_repository_override | default('crystal') }}"
         update_cache: true
         state: "{{ crystal_state }}"
-  when: ansible_os_family == "RedHat"
