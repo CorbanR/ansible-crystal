@@ -8,6 +8,12 @@ stages:
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
 
 services:
   - docker:dind
@@ -18,6 +24,18 @@ before_script:
     libxml2-dev linux-headers libxslt libxslt-dev
   - pip3 install pip setuptools --upgrade
   - docker info
+
+lint:
+  stage: molecule
+  script:
+    - docker -v
+    - python3 -V
+    - pip3 install -r molecule/requirements.txt
+    - ansible --version
+    - ansible-lint defaults/ tasks/
+    - yamllint defaults/ tasks/
+  tags:
+    - docker
 
 molecule:
   stage: molecule

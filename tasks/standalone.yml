@@ -17,6 +17,7 @@
   file:
     path: "/usr/local/src/{{ crystal_release }}"
     state: directory
+    mode: "0755"
 
 - name: Unarchive crystal binary
   unarchive:

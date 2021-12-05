@@ -4,12 +4,14 @@ dependency:
 driver:
   name: docker
 platforms:
+  - name: centos8
+    image: ${CENTOS_EIGHT_IMAGE:-centos:centos8}
   - name: centos7
-    image: centos:7
+    image: ${CENTOS_SEVEN_IMAGE:-centos:centos7}
   - name: ubuntu1804
-    image: ubuntu:18.04
+    image: ${UBUNTU_BIONIC_IMAGE:-ubuntu:18.04}
   - name: ubuntu2004
-    image: ubuntu:20.04
+    image: ${UBUNTU_FOCAL_IMAGE:-ubuntu:20.04}
 provisioner:
   name: ansible
 scenario:

@@ -5,6 +5,11 @@
   when: crystal_arch != "x86_64"
 
 - block:
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "Installing repository {{ crystal_distribution_deb_repo }}"
+
     - name: Ensure cache is updated for testing
       apt:
         update_cache: true
@@ -17,115 +22,172 @@
         pkg:
           - apt-transport-https
           - gnupg
+          - ca-certificates
 
-    - name: Remove old apt key
+    - block:
+        - name: Remove old crystal apt key
+          apt_key:
+            id: 09617FD37CC06B54
+            state: absent
+            data: "{{ item }}"
+          with_file:
+            - crystal-apt.gpg.pub
+
+        - name: Remove old bintray apt key
+          apt_key:
+            id: 379CE192D401AB61
+            state: absent
+            data: "{{ item }}"
+          with_file:
+            - bintray-public.key.asc
+
+        - name: Remove old crystal apt repositories
+          apt_repository:
+            repo: "{{ item }}"
+            state: absent
+          loop:
+            - "deb https://dist.crystal-lang.org/apt crystal main"
+            - "deb https://dl.bintray.com/crystal/deb all {{ crystal_channel }}"
+      when: crystal_remove_old_repositories
+
+    - name: Add the opensuse crystal apt signing key
       apt_key:
-        id: 09617FD37CC06B54
-        state: absent
+        id: E456AE72856D1476
         data: "{{ item }}"
       with_file:
-        - crystal-apt.gpg.pub
+        - opensuse-public.key.asc
 
-    - name: Remove old crystal apt repository
+    - name: Add crystal opensuse apt repository
       apt_repository:
-        repo: "deb https://dist.crystal-lang.org/apt crystal main"
-        state: absent
-
-    - name: Add the crystal bintray apt signing key
-      apt_key:
-        id: 379CE192D401AB61
-        data: "{{ item }}"
-      with_file:
-        - bintray-public.key.asc
-
-    - name: Add crystal apt repository
-      apt_repository:
-        repo: "deb https://dl.bintray.com/crystal/deb all {{ crystal_channel }}"
+        repo: "{{ crystal_distribution_deb_repo }}"
         state: present
 
     - name: Install crystal
       apt:
-        name: "{{ crystal_version_repository_override | default('crystal')}}"
+        name: "{{ crystal_version_repository_override | default('crystal') }}"
         update_cache: true
         install_recommends: "{{ crystal_install_recommends }}"
         state: "{{ crystal_state }}"
   when: ansible_os_family == "Debian"
 
 - block:
+    - name: Display info
+      ansible.builtin.debug:
+        msg: >
+          "Installing repository {{ crystal_distribution_yum_repo }}"
+
     - name: Install additional Yum dependancies
       yum:
         name:
           - deltarpm
         update_cache: true
-    # Notice this is checking for the crystal-apt and not crystal-rpm.. previously the task was using the wrong key.
-    # So we check for both
-    - name: Check for old apt repository gpg key
-      stat:
-        path: /usr/local/src/crystal-apt.gpg.pub
-      register: old_apt_gpg_key
+      when: ansible_distribution_major_version <= "7"
 
-    - name: Check for old rpm repository gpg key
-      stat:
-        path: /usr/local/src/crystal-rpm.gpg.pub
-      register: old_rpm_gpg_key
+    - name: Install additional Yum dependancies
+      yum:
+        name:
+          - drpm
+        update_cache: true
+      when: ansible_distribution_major_version >= "8"
 
-    - name: Remove old apt key
-      rpm_key:
-        state: absent
-        key: /usr/local/src/crystal-apt.gpg.pub
-      when: old_apt_gpg_key.stat.exists
+    - block:
+        # Notice this is checking for the crystal-apt and not crystal-rpm.. previously the task was using the wrong key.
+        # So we check for both
+        - name: Check for old apt repository gpg key
+          stat:
+            path: /usr/local/src/crystal-apt.gpg.pub
+          register: old_apt_gpg_key
 
-    - name: Remove old rpm key
-      rpm_key:
-        state: absent
-        key: /usr/local/src/crystal-rpm.gpg.pub
-      when: old_rpm_gpg_key.stat.exists
+        - name: Check for old rpm repository gpg key
+          stat:
+            path: /usr/local/src/crystal-rpm.gpg.pub
+          register: old_rpm_gpg_key
 
-    - name: Remove old apt gpg key file
-      file:
-        state: absent
-        path: /usr/local/src/crystal-apt.gpg.pub
-      when: old_apt_gpg_key.stat.exists
+        - name: Check for old bintray repository gpg key
+          stat:
+            path: /usr/local/src/bintray-public.key.asc
+          register: old_bintray_gpg_key
 
-    - name: Remove old rpm gpg key file
-      file:
-        state: absent
-        path: /usr/local/src/crystal-rpm.gpg.pub
-      when: old_rpm_gpg_key.stat.exists
+        - name: Remove old apt key
+          rpm_key:
+            state: absent
+            key: /usr/local/src/crystal-apt.gpg.pub
+          when: old_apt_gpg_key.stat.exists
 
-    - name: Remove old crystal rpm repository
-      yum_repository:
-        name: Crystal
-        description: Crystal rpm repository
-        file: crystal.repo
-        state: absent
-        baseurl: http://dist.crystal-lang.org/rpm/
+        - name: Remove old rpm key
+          rpm_key:
+            state: absent
+            key: /usr/local/src/crystal-rpm.gpg.pub
+          when: old_rpm_gpg_key.stat.exists
 
-    - name: Copy bintray key to remote host
+        - name: Remove old bintray key
+          rpm_key:
+            state: absent
+            key: /usr/local/src/bintray-public.key.asc
+          when: old_bintray_gpg_key.stat.exists
+
+        - name: Remove old apt gpg key file
+          file:
+            state: absent
+            path: /usr/local/src/crystal-apt.gpg.pub
+          when: old_apt_gpg_key.stat.exists
+
+        - name: Remove old rpm gpg key file
+          file:
+            state: absent
+            path: /usr/local/src/crystal-rpm.gpg.pub
+          when: old_rpm_gpg_key.stat.exists
+
+        - name: Remove old bintray gpg key file
+          file:
+            state: absent
+            path: /usr/local/src/bintray-public.key.asc
+          when: old_bintray_gpg_key.stat.exists
+
+        - name: Remove old crystal rpm repository
+          yum_repository:
+            name: Crystal
+            description: Crystal rpm repository
+            file: crystal.repo
+            state: absent
+            baseurl: http://dist.crystal-lang.org/rpm/
+
+        - name: Remove old crystal bintray repository
+          yum_repository:
+            name: Crystal
+            description: Crystal rpm repository
+            file: crystal.rpm.repo
+            state: absent
+            baseurl: "https://dl.bintray.com/crystal/rpm/all/{{ crystal_arch }}/{{ crystal_channel }}"
+
+      when: crystal_remove_old_repositories
+
+    - name: Copy opensuse key to remote host
       copy:
-        src: bintray-public.key.asc
-        dest: /usr/local/src/bintray-public.key.asc
+        src: opensuse-public.key.asc
+        dest: /usr/local/src/opensuse-public.key.asc
+        mode: '0644'
 
-    - name: Add the bintray crystal rpm signing key
+    - name: Add the opensuse crystal rpm signing key
       rpm_key:
         state: present
-        key: /usr/local/src/bintray-public.key.asc
+        key: /usr/local/src/opensuse-public.key.asc
 
     # See https://crystal-lang.org/install/on_centos/
-    - name: Add crystal rpm repository
+    - name: Add opensuse(hosted) crystal rpm repository
       yum_repository:
         name: Crystal
         description: Crystal rpm repository
-        file: crystal.rpm.repo
+        file: crystal-opensuse.rpm.repo
         state: present
         repo_gpgcheck: true
-        gpgkey: https://bintray.com/user/downloadSubjectPublicKey?username=bintray
-        gpgcheck: false   # Packages are not signed for whatever reason...
-        baseurl: "https://dl.bintray.com/crystal/rpm/all/{{ crystal_arch }}/{{ crystal_channel }}"
+        gpgkey: "{{ crystal_distribution_base_repo_url }}/repodata/repomd.xml.key"
+        gpgcheck: true   # Packages are not signed for whatever reason...
+        baseurl: "{{ crystal_distribution_yum_repo }}"
 
     - name: Install crystal
       yum:
-        name: "{{ crystal_version_repository_override | default('crystal')}}"
+        name: "{{ crystal_version_repository_override | default('crystal') }}"
         update_cache: true
         state: "{{ crystal_state }}"
   when: ansible_os_family == "RedHat"
