@@ -4,14 +4,19 @@ dependency:
 driver:
   name: docker
 platforms:
+  # linux/arm64/v8 is for apple m1, crystal requires building from source for m1 support
   - name: centos8
     image: ${CENTOS_EIGHT_IMAGE:-centos:centos8}
+    platform: ${DOCKER_DEFAULT_PLATFORM:-linux/amd64}
   - name: centos7
     image: ${CENTOS_SEVEN_IMAGE:-centos:centos7}
+    platform: ${DOCKER_DEFAULT_PLATFORM:-linux/amd64}
   - name: ubuntu1804
     image: ${UBUNTU_BIONIC_IMAGE:-ubuntu:18.04}
+    platform: ${DOCKER_DEFAULT_PLATFORM:-linux/amd64}
   - name: ubuntu2004
     image: ${UBUNTU_FOCAL_IMAGE:-ubuntu:20.04}
+    platform: ${DOCKER_DEFAULT_PLATFORM:-linux/amd64}
 provisioner:
   name: ansible
 scenario:

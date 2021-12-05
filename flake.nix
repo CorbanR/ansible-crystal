@@ -40,9 +40,11 @@
               if [ $(uname -s) == "Darwin" ]; then
                 export DOCKER_DEFAULT_PLATFORM=linux/amd64
                 # This is to override the default images used by molecule(ansible testing)
-                export CENTOS_EIGHT_IMAGE=centos:centos8@sha256:a1801b843b1bfaf77c501e7a6d3f709401a1e0c83863037fa3aab063a7fdb9dc
-                export UBUNTU_FOCAL_IMAGE=ubuntu:20.04@sha256:7cc0576c7c0ec2384de5cbf245f41567e922aab1b075f3e8ad565f508032df17
-                export UBUNTU_BIONIC_IMAGE=ubuntu:18.04@sha256:fc0d6af5ab38dab33aa53643c4c4b312c6cd1f044c1a2229b2743b252b9689fc
+                # These were required as upstream molecule is defaulting to system image (on my m1 that is arm64). Added custom create.yml
+                # with platform option. This is needed until https://github.com/ansible-community/molecule-docker/pull/122 is merged.
+                #export centos_eight_image=centos:centos8@sha256:a1801b843b1bfaf77c501e7a6d3f709401a1e0c83863037fa3aab063a7fdb9dc
+                #export UBUNTU_FOCAL_IMAGE=ubuntu:20.04@sha256:7cc0576c7c0ec2384de5cbf245f41567e922aab1b075f3e8ad565f508032df17
+                #export UBUNTU_BIONIC_IMAGE=ubuntu:18.04@sha256:fc0d6af5ab38dab33aa53643c4c4b312c6cd1f044c1a2229b2743b252b9689fc
               fi
               # For python virtualenv
               SOURCE_DATE_EPOCH=$(date +%s)
