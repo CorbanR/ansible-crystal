@@ -1,32 +1,37 @@
----
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 image: docker:stable
-
 stages:
-  - molecule
-
-# See https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+- molecule
+- test
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
-
 services:
-  - docker:dind
-
+- docker:dind
 before_script:
-  - apk add --no-cache python3 python3-dev py3-pip py3-lxml
-    build-base rust cargo libffi libffi-dev openssl openssl-dev libxml2
-    libxml2-dev linux-headers libxslt libxslt-dev
-  - pip3 install pip setuptools --upgrade
-  - docker info
-
+- apk add --no-cache python3 python3-dev py3-pip py3-lxml build-base rust cargo libffi
+  libffi-dev openssl openssl-dev libxml2 libxml2-dev linux-headers libxslt libxslt-dev
+- pip3 install pip setuptools --upgrade
+- docker info
 molecule:
   stage: molecule
   script:
-    - docker -v
-    - python3 -V
-    - pip3 install -r molecule/requirements.txt
-    - ansible --version
-    - molecule --version
-    - molecule test --all
+  - docker -v
+  - python3 -V
+  - pip3 install -r molecule/requirements.txt
+  - ansible --version
+  - molecule --version
+  - molecule test --all
   tags:
-    - docker
+  - docker
+sast:
+  variables:
+    SAST_EXCLUDED_PATHS: spec, test, tests, tmp, *.nix, flake.lock
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
