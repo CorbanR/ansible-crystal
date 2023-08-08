@@ -55,13 +55,9 @@
 
     - name: Add the opensuse crystal apt signing key
       ansible.builtin.apt_key:
-        #id: E456AE72856D1476
         id: E456AE72856D1476
         data: "{{ lookup('ansible.builtin.file', 'opensuse-public.key.asc') }}"
         state: present
-        #data: "{{ item }}"
-      #with_file:
-        #- opensuse-public.key.asc
 
     - name: Display info
       ansible.builtin.debug:
