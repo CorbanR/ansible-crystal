@@ -46,9 +46,9 @@
               if [ $(uname -s) == "Darwin" ]; then
                 export DOCKER_DEFAULT_PLATFORM=linux/amd64
                 # This is to override the default images used by molecule(ansible testing)
-                export CENTOS_STREAM_EIGHT_IMAGE=quay.io/centos/centos@sha256:14e52c6a3e607a0c05080d7a9ef6ecb200a330da927cd2b3b28d165317af1394
-                export UBUNTU_FOCAL_IMAGE=ubuntu@sha256:a0a45bd8c6c4acd6967396366f01f2a68f73406327285edc5b7b07cb1cf073db
-                export UBUNTU_JAMMY_IMAGE=ubuntu@sha256:2d7ecc9c5e08953d586a6e50c29b91479a48f69ac1ba1f9dc0420d18a728dfc5
+                export CENTOS_STREAM_EIGHT_IMAGE=quay.io/centos/centos@sha256:42195c1371c1373da4420dfd0bbae11ac5617fc5571e6549ce95f59a994ff0ab
+                export UBUNTU_FOCAL_IMAGE=ubuntu@sha256:3246518d9735254519e1b2ff35f95686e4a5011c90c85344c1f38df7bae9dd37
+                export UBUNTU_JAMMY_IMAGE=ubuntu@sha256:b060fffe8e1561c9c3e6dea6db487b900100fc26830b9ea2ec966c151ab4c020
               fi
               # For python virtualenv
               SOURCE_DATE_EPOCH=$(date +%s)

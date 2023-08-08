@@ -10,7 +10,9 @@ Role to install [crystal-lang](https://crystal-lang.org/). This role offers two 
 
 Requirements
 ------------
-Ansible >= 2.12
+Ansible >= 8.2
+Ansible-Core >= 2.15
+
 
 Role Variables
 --------------
@@ -36,12 +38,12 @@ When `standalone` installation type, specify crystal version, platform, arch, re
 see the [crystal release page](https://github.com/crystal-lang/crystal/releases) for more information. The `standalone` installation type creates 
 two symlinks, `/usr/local/bin/crystal` and  `/usr/local/bin/crystal-{{ crystal_version }}`  
 ```
-crystal_version: 1.5.1
+crystal_version: 1.9.2
 crystal_revision: 1
 crystal_platform: "{{ ansible_system | lower | default('linux') }}"
 crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:00211ca77758e99210ec40b8c5517b086d2ff9909e089400f6d847a95e5689a4"
+crystal_checksum: "sha256:2dcfa020763998550904d6d8ea3eb178a1d93e8d7fea0f61d8c80c2b8fce9e24"
 ```
 
 Optionally install additional packages required to compile crystal code.  

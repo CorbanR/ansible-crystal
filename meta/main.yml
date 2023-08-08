@@ -8,7 +8,7 @@ galaxy_info:
     Installs the latest stable release from official Bintray repositories by default(x86_64 Linux).
     Different platforms and versions are supported by modifying the role variables.
   license: MIT
-  min_ansible_version: 2.11
+  min_ansible_version: 2.15
   platforms:
     - name: EL
       versions:
