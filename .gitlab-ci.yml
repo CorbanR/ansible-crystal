@@ -74,3 +74,4 @@ Run molecule:
     - molecule test
   tags:
     - docker
+    - gitlab-org-docker
