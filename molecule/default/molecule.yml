@@ -7,11 +7,11 @@ platforms:
   - name: stream8
     image: ${CENTOS_STREAM_EIGHT_IMAGE:-quay.io/centos/centos:stream8}
     pre_build_image: true
-  - name: ubuntu2004
-    image: ${UBUNTU_FOCAL_IMAGE:-ubuntu:20.04}
-    pre_build_image: true
   - name: ubuntu2204
     image: ${UBUNTU_JAMMY_IMAGE:-ubuntu:22.04}
+    pre_build_image: true
+  - name: ubuntu2404
+    image: ${UBUNTU_NOBLE_IMAGE:-ubuntu:24.04}
     pre_build_image: true
 provisioner:
   name: ansible

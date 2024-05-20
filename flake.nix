@@ -47,8 +47,10 @@
                 export DOCKER_DEFAULT_PLATFORM=linux/amd64
                 # This is to override the default images used by molecule(ansible testing)
                 export CENTOS_STREAM_EIGHT_IMAGE=quay.io/centos/centos@sha256:42195c1371c1373da4420dfd0bbae11ac5617fc5571e6549ce95f59a994ff0ab
+                export CENTOS_STREAM_NINE_IMAGE=quay.io/centos/centos@sha256:711657d29f93314255e2f05e46e0fc55e4ad56e04b16dbfb2cc78d6527e46808
                 export UBUNTU_FOCAL_IMAGE=ubuntu@sha256:3246518d9735254519e1b2ff35f95686e4a5011c90c85344c1f38df7bae9dd37
                 export UBUNTU_JAMMY_IMAGE=ubuntu@sha256:b060fffe8e1561c9c3e6dea6db487b900100fc26830b9ea2ec966c151ab4c020
+                export UBUNTU_NOBLE_IMAGE=ubuntu@sha256:d21429c4635332e96a4baae3169e3f02ac8e24e6ae3d89a86002d49a1259a4f7
               fi
               # For python virtualenv
               SOURCE_DATE_EPOCH=$(date +%s)

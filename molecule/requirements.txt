@@ -1,10 +1,10 @@
 wheel
-ansible~=8.2.0
-molecule~=5.1.0
+ansible~=9.5.0
+molecule~=24.2.1
 molecule-docker~=2.1.0
-pytest-testinfra~=8.1.0
+pytest-testinfra~=10.1.0
 pytest-testinfra[ansible]
-docker~=6.1.3
+docker~=7.0.0
 Pygments
 PyYAML
 Sphinx
