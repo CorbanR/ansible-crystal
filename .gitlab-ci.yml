@@ -40,18 +40,16 @@ Run linter:
     - apk add --no-cache python3 python3-dev py3-pip py3-lxml
       build-base rust cargo libffi libffi-dev openssl openssl-dev libxml2
       libxml2-dev linux-headers libxslt libxslt-dev
-    - pip3 install pip setuptools --upgrade
+    - pip3 install pip setuptools --upgrade --break-system-packages
     - docker info
   script:
     - docker -v
     - docker buildx install
     - python3 -V
-    - pip3 install -r molecule/requirements.txt
+    - pip3 install -r molecule/requirements.txt --break-system-packages
     - ansible --version
     - ansible-lint defaults/ tasks/
     - yamllint defaults/ tasks/
-  tags:
-    - docker
 
 Run molecule:
   stage: molecule
@@ -62,16 +60,13 @@ Run molecule:
     - apk add --no-cache python3 python3-dev py3-pip py3-lxml
       build-base rust cargo libffi libffi-dev openssl openssl-dev libxml2
       libxml2-dev linux-headers libxslt libxslt-dev
-    - pip3 install pip setuptools --upgrade
+    - pip3 install pip setuptools --upgrade --break-system-packages
     - docker info
   script:
     - docker -v
     - docker buildx install
     - python3 -V
-    - pip3 install -r molecule/requirements.txt
+    - pip3 install -r molecule/requirements.txt --break-system-packages
     - ansible --version
     - molecule --version
     - molecule test
-  tags:
-    - docker
-    - gitlab-org-docker
