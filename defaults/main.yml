@@ -23,9 +23,9 @@ crystal_remove_old_repositories: true
 crystal_install_method: repository
 
 # Binary install
-crystal_version: 1.9.2
+crystal_version: 1.12.1
 crystal_revision: 1
 crystal_platform: "{{ ansible_system | lower | default('linux') }}"
 crystal_arch: "{{ ansible_architecture | default('x86_64') }}"
 crystal_release: "crystal-{{ crystal_version }}-{{ crystal_revision }}-{{ crystal_platform }}-{{ crystal_arch }}"
-crystal_checksum: "sha256:2dcfa020763998550904d6d8ea3eb178a1d93e8d7fea0f61d8c80c2b8fce9e24"
+crystal_checksum: "sha256:596d2ba9269b6f394d9e2298b0fa14c3fafd4733ed02847cfa496eeeb6a070e3"
